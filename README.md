@@ -3,7 +3,7 @@
     <img align="left" alt="Icon" height="90" src="Icon.png">
     <img align="right" alt="Download" height="75" src="https://raw.githubusercontent.com/gurrenm3/BTD-Mod-Helper/master/BloonsTD6%20Mod%20Helper/Resources/DownloadBtn.png">
 </a>
-OsirisHero
+Osiris: Keeper of Spirits
 </h1>
 
 Adds a new hero Osiris to the game. Osiris summons spirits to fight along side him.
