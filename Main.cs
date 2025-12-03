@@ -1,22 +1,22 @@
-﻿using BTD_Mod_Helper.Api.Towers;
-using Il2Cpp;
-using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack.Behaviors;
-using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
-using Il2CppAssets.Scripts.Models.Towers;
+﻿using Assets.Projectiles;
+using BTD_Mod_Helper.Api.Display;
 using BTD_Mod_Helper.Api.Enums;
+using BTD_Mod_Helper.Api.Towers;
 using BTD_Mod_Helper.Extensions;
+using HarmonyLib;
+using Il2Cpp;
+using Il2CppAssets.Scripts.Models.Bloons.Behaviors;
+using Il2CppAssets.Scripts.Models.Towers;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Abilities.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack;
+using Il2CppAssets.Scripts.Models.Towers.Behaviors.Attack.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Behaviors.Emissions;
 using Il2CppAssets.Scripts.Models.Towers.Filters;
-using Il2CppAssets.Scripts.Unity;
-using HarmonyLib;
-using Il2CppAssets.Scripts.Simulation.SimulationBehaviors;
-using Il2CppAssets.Scripts.Models.Towers.Weapons.Behaviors;
-using Assets.Projectiles;
-using Il2CppAssets.Scripts.Models.Bloons.Behaviors;
 using Il2CppAssets.Scripts.Models.Towers.Projectiles;
-using BTD_Mod_Helper.Api.Display;
+using Il2CppAssets.Scripts.Models.Towers.Projectiles.Behaviors;
+using Il2CppAssets.Scripts.Models.Towers.Weapons.Behaviors;
+using Il2CppAssets.Scripts.Simulation.SimulationBehaviors;
+using Il2CppAssets.Scripts.Unity;
 using Il2CppAssets.Scripts.Unity.Display;
 using Il2CppNinjaKiwi.Common.ResourceUtils;
 
@@ -315,7 +315,7 @@ namespace OsirisHero
             iceBomb.GetBehavior<CreateProjectileOnContactModel>().projectile.GetDamageModel().damage += 2;
 
             natureSpirit.GetAttackModel().weapons[0].rate /= 1.2f;
-            natureSpirit.GetAttackModel().weapons[0].projectile.GetDamageModel().damage += 1;
+            natureSpirit.GetAttackModel().weapons[0].projectile.GetDamageModel().damage += 2;
             var mossBomb = natureSpirit.GetAttackModel().weapons[0].GetBehavior<ChangeProjectilePerEmitModel>().changedProjectileModel;
             mossBomb.GetDescendants<CreateProjectileOnContactModel>().ForEach(model => model.projectile.GetDamageModel().damage += 1);
         }
@@ -394,18 +394,20 @@ namespace OsirisHero
             emberSpirit.GetAttackModel().weapons[0].projectile.GetDamageModel().damage += 1;
             var fireWall = emberSpirit.GetAttackModel().weapons[0].GetBehavior<ChangeProjectilePerEmitModel>().changedProjectileModel;
             fireWall.GetDamageModel().damage += 1;
-            fireWall.GetBehavior<CreateProjectileOnExhaustFractionModel>().projectile.GetDamageModel().damage += 1;
             fireWall.GetBehavior<CreateProjectileOnExhaustFractionModel>().projectile.GetBehavior<ClearHitBloonsModel>().interval -= 0.05f;
 
             frostSpirit.GetAttackModel().weapons[0].GetBehavior<ChangeProjectilePerEmitModel>().forProjectileCount -= 2;
             frostSpirit.GetAttackModel().weapons[0].projectile.GetDamageModel().damage += 2;
-            var iceBomb = frostSpirit.GetAttackModel().weapons[0].GetBehavior<ChangeProjectilePerEmitModel>().changedProjectileModel;
-            iceBomb.GetBehavior<CreateProjectileOnContactModel>().projectile.GetDamageModel().damage += 2;
+            var frostSpike = Game.instance.model.GetTowerFromId("IceMonkey-005").GetAttackModel().weapons[0].projectile.Duplicate();
+            frostSpirit.GetAttackModel().weapons[0].GetBehavior<ChangeProjectilePerEmitModel>().changedProjectileModel = frostSpike;
 
             natureSpirit.GetAttackModel().weapons[0].GetBehavior<ChangeProjectilePerEmitModel>().forProjectileCount -= 2;
-            natureSpirit.GetAttackModel().weapons[0].projectile.GetDamageModel().damage += 1;
+            natureSpirit.GetAttackModel().weapons[0].projectile.GetDamageModel().damage += 2;
+            natureSpirit.GetAttackModel().weapons[0].projectile.AddBehavior(new DamageModifierForTagModel("MoabModifier_", "Moabs", 1, 5, false, false));
             var mossBomb = natureSpirit.GetAttackModel().weapons[0].GetBehavior<ChangeProjectilePerEmitModel>().changedProjectileModel;
-            mossBomb.GetDescendants<CreateProjectileOnContactModel>().ForEach(model => model.projectile.GetDamageModel().damage += 1);
+            mossBomb.GetDescendants<CreateProjectileOnContactModel>().ForEach(model => model.projectile.GetDamageModel().damage += 2);
+            mossBomb.GetDescendants<CreateProjectileOnContactModel>().ForEach(model => model.projectile.AddBehavior
+                (new DamageModifierForTagModel("MoabModifier_", "Moabs", 1, 4, false, false)));
         }
     }
     public class L17 : ModHeroLevel<Osiris>
@@ -459,7 +461,7 @@ namespace OsirisHero
             var natureSpirit = towers.towers[2];
 
             emberSpirit.GetAttackModel().weapons[0].rate /= 1.5f;
-            emberSpirit.GetAttackModel().weapons[0].projectile.GetDamageModel().damage += 2;
+            emberSpirit.GetAttackModel().weapons[0].projectile.GetDamageModel().damage += 1;
             var fireWall = emberSpirit.GetAttackModel().weapons[0].GetBehavior<ChangeProjectilePerEmitModel>().changedProjectileModel;
             fireWall.GetDamageModel().damage += 2;
             fireWall.GetBehavior<CreateProjectileOnExhaustFractionModel>().projectile.GetDamageModel().damage += 1;
@@ -471,9 +473,9 @@ namespace OsirisHero
             iceBomb.GetBehavior<CreateProjectileOnContactModel>().projectile.GetDamageModel().damage += 2;
 
             natureSpirit.GetAttackModel().weapons[0].rate /= 1.25f;
-            natureSpirit.GetAttackModel().weapons[0].projectile.GetDamageModel().damage += 1;
+            natureSpirit.GetAttackModel().weapons[0].projectile.GetDamageModel().damage += 3;
             var mossBomb = natureSpirit.GetAttackModel().weapons[0].GetBehavior<ChangeProjectilePerEmitModel>().changedProjectileModel;
-            mossBomb.GetDescendants<CreateProjectileOnContactModel>().ForEach(model => model.projectile.GetDamageModel().damage += 1);
+            mossBomb.GetDescendants<CreateProjectileOnContactModel>().ForEach(model => model.projectile.GetDamageModel().damage += 3);
 
 
             towerModel.GetAbility(2).cooldown = 60;
@@ -499,9 +501,10 @@ namespace OsirisHero
             var tower = __instance.tower;
             if (tower.towerModel.name.Contains("OsirisHero"))
             {
-                __result = 9999;                
+                __result = 9999;
+                return false;
             }
-            return false;
+            else { return true; }
         }
     }
 }

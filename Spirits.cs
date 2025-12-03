@@ -43,7 +43,7 @@ namespace OsirisHero
             towerModel.GetAttackModel().range = 45;
             towerModel.GetAttackModel().weapons[0].rate = 0.3f;
             towerModel.GetAttackModel().weapons[0].projectile.ApplyDisplay<SpiritFlame>();
-            towerModel.GetAttackModel().weapons[0].projectile.pierce = 2;
+            towerModel.GetAttackModel().weapons[0].projectile.pierce = 1;
             towerModel.GetAttackModel().weapons[0].projectile.GetDamageModel().damage = 1;
             towerModel.GetAttackModel().weapons[0].projectile.GetDamageModel().immuneBloonProperties = BloonProperties.Purple;
 
